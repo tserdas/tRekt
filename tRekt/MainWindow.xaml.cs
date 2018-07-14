@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -28,30 +29,37 @@ namespace tRekt
         private void tryclick(object sender, RoutedEventArgs e)
         {
             int index = int.Parse(((Button)e.Source).Uid);
-            GridCursor.Margin = new Thickness(10 + (150 * index), 0, 0, 0);
-
+            //GridCursor.Margin = new Thickness(10 + (150 * index), 0, 0, 0);
+            Grid.SetColumn(GridCursor, index);
             switch(index)
             {
                 case 0:
-                    GridMain.Background = Brushes.White;
+                    dataGrid.Visibility = Visibility.Visible;
+                    btn_Download.Visibility = Visibility.Visible;
                     break;
                 case 1:
-                    GridMain.Background = Brushes.SaddleBrown;
+                    dataGrid.Visibility = Visibility.Collapsed;
+                    btn_Download.Visibility = Visibility.Collapsed;
                     break;
                 case 2:
-                    GridMain.Background = Brushes.RosyBrown;
+                    dataGrid.Visibility = Visibility.Collapsed;
+                    btn_Download.Visibility = Visibility.Collapsed;
                     break;
                 case 3:
-                    GridMain.Background = Brushes.SandyBrown;
+                    dataGrid.Visibility = Visibility.Collapsed;
+                    btn_Download.Visibility = Visibility.Collapsed;
                     break;
                 case 4:
-                    GridMain.Background = Brushes.SkyBlue;
+                    dataGrid.Visibility = Visibility.Collapsed;
+                    btn_Download.Visibility = Visibility.Collapsed;
                     break;
                 case 5:
-                    GridMain.Background = Brushes.Snow;
+                    dataGrid.Visibility = Visibility.Collapsed;
+                    btn_Download.Visibility = Visibility.Collapsed;
                     break;
                 case 6:
-                    GridMain.Background = Brushes.SlateGray;
+                    dataGrid.Visibility = Visibility.Collapsed;
+                    btn_Download.Visibility = Visibility.Collapsed;
                     break;
             }
         }
@@ -59,6 +67,32 @@ namespace tRekt
         private void btn_close(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
+        }
+
+        private void btn_fullscreen(object sender, RoutedEventArgs e)
+        {
+            if (this.WindowState == WindowState.Maximized)
+                this.WindowState = WindowState.Normal;
+            else
+                this.WindowState = WindowState.Maximized;
+        }
+
+        private void btn_download(object sender, RoutedEventArgs e)
+        {
+            RestClient rClient = new RestClient();
+            rClient.get();
+            List<CryptoInfo> cryptocollection = JsonConvert.DeserializeObject<List<CryptoInfo>>(rClient.GetResult);
+            dataGrid.ItemsSource = cryptocollection;            
+        }
+
+        private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            this.DragMove();
+        }
+
+        private void btn_contact(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://twitter.com/cryptoaltrader");
         }
     }
 }
